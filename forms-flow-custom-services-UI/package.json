@@ -3,13 +3,14 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "start": "webpack serve --port 3015",
+    "start": "webpack serve --port 3013",
     "build": "webpack --mode=production",
     "lint": "eslint src --ext js,ts,tsx",
     "test": "echo \"No tests yet\"",
     "build:types": "tsc"
   },
   "dependencies": {
+    "@babel/runtime": "^7.29.2",
     "@formio/js": "^5.3.3",
     "@formio/react": "^6.2.0",
     "axios": "^1.15.2",
