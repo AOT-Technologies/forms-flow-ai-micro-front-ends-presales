@@ -9,7 +9,7 @@ declare module "*.gif";
 
 declare namespace NodeJS {
   interface ProcessEnv {
-    FORMIO_URL: string;
-    PROXY_URL: string;
+    FORMS_FLOW_FORMIO_URL: string;
+    FORMS_FLOW_CUSTOM_SERVICES_URL: string;
   }
 }

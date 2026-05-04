@@ -11,7 +11,7 @@ module.exports = (webpackConfigEnv, argv) => {
   };
   
   const clientEnv = {};
-  const allowedKeys = ['FORMIO_URL', 'PROXY_URL'];
+  const allowedKeys = ['FORMS_FLOW_FORMIO_URL', 'FORMS_FLOW_CUSTOM_SERVICES_URL'];
   
   Object.keys(env).forEach(key => {
     if (allowedKeys.includes(key)) {
