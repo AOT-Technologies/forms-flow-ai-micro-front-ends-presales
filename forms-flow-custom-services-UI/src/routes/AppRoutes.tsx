@@ -1,3 +1,4 @@
+import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import ExternalLinkPage from '../pages/ExternalLink/ExternalLinkPage';
 import { APP_ROUTES } from '../constants/routes';

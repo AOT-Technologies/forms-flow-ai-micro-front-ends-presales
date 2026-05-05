@@ -1,13 +1,12 @@
 import React from 'react';
-import ReactDOMClient from 'react-dom/client';
+import ReactDOM from 'react-dom';
 import singleSpaReact from 'single-spa-react';
 import App from './App';
 
 const lifecycles = singleSpaReact({
   React,
-  ReactDOMClient,
+  ReactDOM: (ReactDOM as any),
   rootComponent: App,
-  renderType: 'createRoot',
   errorBoundary(err, _info, _props) {
     // Customize the root error boundary for your microfrontend here.
     console.error('Custom Services UI Error:', err);

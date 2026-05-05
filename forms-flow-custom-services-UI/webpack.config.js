@@ -9,19 +9,19 @@ module.exports = (webpackConfigEnv, argv) => {
     ...process.env,
     ...(dotenv.config().parsed || {})
   };
-  
+
   const clientEnv = {};
   const allowedKeys = ['FORMS_FLOW_FORMIO_URL', 'FORMS_FLOW_CUSTOM_SERVICES_URL'];
-  
+
   Object.keys(env).forEach(key => {
     if (allowedKeys.includes(key)) {
       clientEnv[key] = env[key];
     }
   });
-  
+
   const defaultConfig = singleSpaDefaults({
     orgName: "formsflow",
-    projectName: "custom-services",
+    projectName: "custom-services-UI",
     webpackConfigEnv,
     argv,
   });
@@ -31,10 +31,10 @@ module.exports = (webpackConfigEnv, argv) => {
       headers: {
         "Access-Control-Allow-Origin": "*",
       },
-      port: 3015
+      port: 3013
     },
-    output:{
-      filename:"forms-flow-custom-services-UI.js"
+    output: {
+      filename: "forms-flow-custom-services-UI.js"
     },
     module: {
       rules: [
@@ -56,6 +56,6 @@ module.exports = (webpackConfigEnv, argv) => {
         "process.env": JSON.stringify(clientEnv),
       }),
     ],
-    externals: ["@formsflow/*","react","react-dom"]
+    externals: ["@formsflow/*", "react", "react-dom"]
   });
 };
