@@ -1,5 +1,5 @@
-export const FORMS_FLOW_CUSTOM_SERVICES_URL = (window._env_?.FORMS_FLOW_CUSTOM_SERVICES_URL as string) || 'http://localhost:5005';
-export const FORMS_FLOW_FORMIO_URL = (window._env_?.FORMS_FLOW_FORMIO_URL as string) || 'http://localhost:3001';
+export const FORMS_FLOW_CUSTOM_SERVICES_URL = (window._env_?.FORMS_FLOW_CUSTOM_SERVICES_URL as string);
+export const FORMS_FLOW_FORMIO_URL = (window._env_?.FORMS_FLOW_FORMIO_URL as string);
 const MULTITENANCY_ENABLED_VARIABLE = (window._env_?.REACT_APP_MULTI_TENANCY_ENABLED) || false;
 
 export const AppConfig = {
