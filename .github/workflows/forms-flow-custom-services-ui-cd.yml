@@ -6,6 +6,7 @@ on:
       - main
       - develop
       - release/*
+      - develop-presales
     paths:
       - "forms-flow-custom-services-UI/**"
       - "VERSION"
