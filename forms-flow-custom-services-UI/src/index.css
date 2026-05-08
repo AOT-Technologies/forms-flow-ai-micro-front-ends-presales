@@ -1,83 +1,114 @@
-/* formsflow / Form.io default theme — clean white portal */
+/* formsflow / Form.io clean theme */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  --primary-color: #4f46e5;
+  --bg-color: #ffffff; /* Changed to plain white for better injection compatibility */
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+  --border-color: #e2e8f0;
+  --error-color: #ef4444;
+}
 
 body {
-  background-color: #f4f5f7;
+  background-color: var(--bg-color);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  margin: 0;
 }
 
 .portal-container {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start; /* Align left as seen in user screenshots */
   justify-content: flex-start;
-  padding: 24px;
-  background-color: #f4f5f7;
+  padding: 80px 60px; /* Significantly increased padding */
 }
 
 .portal-card {
-  background: #ffffff;
-  border: 1px solid #dde1e7;
-  border-radius: 6px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
-  padding: 28px 32px;
   width: 100%;
-  max-width: 1100px;
+  max-width: 1000px;
+  animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .portal-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding-bottom: 20px;
-  margin-bottom: 24px;
-  border-bottom: 1px solid #dde1e7;
-}
-
-.portal-header-icon {
-  width: 36px;
-  height: 36px;
-  background-color: #000;
-  border-radius: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-  flex-shrink: 0;
+  margin-bottom: 48px; /* Increased spacing */
 }
 
 .portal-header-title {
   margin: 0;
-  font-size: 16px;
-  font-weight: 600;
-  color: #1a1a2e;
+  font-size: 32px; /* Larger heading */
+  font-weight: 700;
+  color: var(--text-main);
+  letter-spacing: -0.02em;
 }
 
 .portal-header-subtitle {
-  margin: 0;
-  font-size: 12px;
-  color: #6c757d;
+  margin: 12px 0 0 0;
+  font-size: 16px;
+  color: var(--text-muted);
 }
 
 .portal-status-center {
-  text-align: center;
-  padding: 40px 0;
+  text-align: left; /* Left align for cleaner flow in injected apps */
 }
 
 .portal-status-center h2 {
-  font-size: 18px;
-  font-weight: 600;
-  color: #1a1a2e;
-  margin-bottom: 8px;
+  font-size: 42px; /* Much larger as per modern clean designs */
+  font-weight: 700;
+  color: var(--text-main);
+  margin: 24px 0 16px;
+  letter-spacing: -0.03em;
 }
 
 .portal-status-center p {
-  color: #6c757d;
-  margin-bottom: 24px;
+  font-size: 18px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin: 0;
 }
 
 .portal-footer {
-  text-align: center;
-  margin-top: 20px;
-  font-size: 12px;
-  color: #adb5bd;
+  display: none;
 }
+
+/* Simpler Spinner */
+.modern-spinner {
+  width: 56px;
+  height: 56px;
+  border: 5px solid #f1f5f9;
+  border-bottom-color: var(--primary-color);
+  border-radius: 50%;
+  display: inline-block;
+  animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Clean Form.io overrides */
+.formio-component-form {
+  margin-top: 32px !important;
+}
+
+.formio-component-button button {
+  padding: 12px 28px !important;
+  font-weight: 600 !important;
+  border-radius: 8px !important;
+}
+
+.form-control {
+  border-radius: 8px !important;
+  padding: 12px 16px !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+

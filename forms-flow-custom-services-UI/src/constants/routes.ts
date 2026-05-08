@@ -1,6 +1,8 @@
+import { BASE_ROUTE } from "./index";
+
 export const APP_ROUTES = {
-  HOME: '/',
-  EXTERNAL_LINK: '/external/public',
+  HOME: `${BASE_ROUTE}custom-services`,
+  EXTERNAL_LINK: `${BASE_ROUTE}custom-services/external/public`,
   NOT_FOUND: '*',
 } as const;
 

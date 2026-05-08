@@ -2,6 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import singleSpaReact from 'single-spa-react';
 import App from './App';
+import { Formio } from '@formio/js';
+
+const FORMIO_URL = (window._env_?.FORMS_FLOW_FORMIO_URL) || 'http://localhost:3001';
+Formio.setProjectUrl(FORMIO_URL);
+Formio.setBaseUrl(FORMIO_URL);
 
 const lifecycles = singleSpaReact({
   React,

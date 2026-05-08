@@ -5,7 +5,7 @@ import { Formio } from '@formio/js';
 import { ApiClient as apiClient } from '../../utils/ApiClient';
 import { API_ROUTES } from '../../constants/routes';
 
-const FORMIO_URL = process.env.FORMS_FLOW_FORMIO_URL || 'http://localhost:3001';
+const FORMIO_URL = (window._env_?.FORMS_FLOW_FORMIO_URL) || 'http://localhost:3001';
 
 // Formsflow forms embed custom JS that references authenticated user objects (groups,
 // roles, currentUser, keycloak). These don't exist in an anonymous external-link session
@@ -154,27 +154,37 @@ function ExternalLinkPage() {
       {/* Loading */}
       {status === 'loading' && (
         <div className="portal-card portal-status-center">
-          <div className="spinner-border text-primary mb-3" role="status" />
-          <h2>Loading Secure Form</h2>
-          <p>Verifying your access link...</p>
+          <div className="modern-spinner mb-5" />
+          <h2>Preparing Your Form</h2>
+          <p>We're securely fetching your form and verifying the access link.</p>
         </div>
       )}
 
       {/* Error */}
       {status === 'error' && (
         <div className="portal-card portal-status-center">
-          <div className="text-danger mb-3" style={{ fontSize: 40 }}>&#9888;</div>
+          <div className="text-danger mb-4">
+            <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+          </div>
           <h2>Access Denied</h2>
-          <p>{errorMessage}</p>
+          <p style={{ marginTop: '24px' }}>{errorMessage}</p>
         </div>
       )}
 
       {/* Success */}
       {status === 'success' && (
         <div className="portal-card portal-status-center">
-          <div className="text-success mb-3" style={{ fontSize: 40 }}>&#10003;</div>
+          <div className="text-success mb-4">
+            <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
+          </div>
           <h2>Submitted Successfully</h2>
-          <p>Your response has been recorded. You may close this window.</p>
+          <p style={{ marginTop: '24px' }}>Your response has been securely recorded. You may now close this window.</p>
         </div>
       )}
 
@@ -182,15 +192,8 @@ function ExternalLinkPage() {
       {status === 'ready' && formData && (
         <div className="portal-card">
           <div className="portal-header">
-            <div className="portal-header-icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-              </svg>
-            </div>
-            <div>
-              <p className="portal-header-title">Secure Form Submission</p>
-              <p className="portal-header-subtitle">Authenticated via External Link &nbsp;&#183;&nbsp; {formData.taskId}</p>
-            </div>
+            <p className="portal-header-title">Secure Form Submission</p>
+            <p className="portal-header-subtitle">Authenticated via Encrypted Link &nbsp;&#183;&nbsp; {formData.taskId}</p>
           </div>
 
           {/* @ts-ignore */}
@@ -208,11 +211,9 @@ function ExternalLinkPage() {
           />
         </div>
       )}
-
-      <div className="portal-footer">
-        Secured by FormsFlow.ai &nbsp;&#183;&nbsp; Your data is encrypted in transit
-      </div>
     </div>
+
+
   );
 }
 
