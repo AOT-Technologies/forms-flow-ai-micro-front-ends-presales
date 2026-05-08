@@ -5,7 +5,7 @@ import { Formio } from '@formio/js';
 import { ApiClient as apiClient } from '../../utils/ApiClient';
 import { API_ROUTES } from '../../constants/routes';
 
-const FORMIO_URL = (window._env_?.FORMS_FLOW_FORMIO_URL) || 'http://localhost:3001';
+const FORMIO_URL = (window._env_?.FORMS_FLOW_FORMIO_URL as string) || 'http://localhost:3001';
 
 // Formsflow forms embed custom JS that references authenticated user objects (groups,
 // roles, currentUser, keycloak). These don't exist in an anonymous external-link session
@@ -58,7 +58,7 @@ function sanitizeComponent(component: any): any {
     `;
   }
   if (Array.isArray(c.components)) {
-    c.components = c.components.map(sanitizeComponent);
+    c.components = (c.components as Array<Record<string, unknown>>).map(sanitizeComponent);
   }
   if (Array.isArray(c.columns)) {
     c.columns = c.columns.map((col: any) => ({
@@ -135,7 +135,7 @@ function ExternalLinkPage() {
       formId: formData.formId,
     })
       .then(() => setStatus('success'))
-      .catch((err: any) => {
+      .catch((err: Error) => {
         console.error('Submission error', err);
         setStatus('ready');
         alert('Submission failed. Please try again.');
