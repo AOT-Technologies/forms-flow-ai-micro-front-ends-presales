@@ -1,5 +1,5 @@
-export const FORMS_FLOW_CUSTOM_SERVICES_URL = (window._env_?.FORMS_FLOW_CUSTOM_SERVICES_URL as string);
-export const FORMS_FLOW_FORMIO_URL = (window._env_?.FORMS_FLOW_FORMIO_URL as string);
+export const FORMS_FLOW_CUSTOM_SERVICES_URL = window._env_?.REACT_APP_CUSTOM_SERVICES_URL ?? (typeof process !== "undefined" ? process.env.REACT_APP_CUSTOM_SERVICES_URL : undefined);
+export const FORMS_FLOW_FORMIO_URL = window._env_?.REACT_APP_FORMIO_URL ?? (typeof process !== "undefined" ? process.env.REACT_APP_FORMIO_URL : undefined);
 const MULTITENANCY_ENABLED_VARIABLE = (window._env_?.REACT_APP_MULTI_TENANCY_ENABLED) || false;
 
 export const AppConfig = {
