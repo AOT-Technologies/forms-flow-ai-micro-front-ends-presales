@@ -5,7 +5,9 @@ import { Formio } from '@formio/js';
 import { ApiClient as apiClient } from '../../utils/ApiClient';
 import { API_ROUTES } from '../../constants/routes';
 
-const FORMIO_URL = (window._env_?.FORMS_FLOW_FORMIO_URL as string) || 'http://localhost:3001';
+import { AppConfig } from '../../config/AppConfig';
+
+const FORMIO_URL = AppConfig.formioUrl;
 
 // Formsflow forms embed custom JS that references authenticated user objects (groups,
 // roles, currentUser, keycloak). These don't exist in an anonymous external-link session
