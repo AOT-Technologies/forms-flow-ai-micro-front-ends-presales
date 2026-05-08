@@ -5,7 +5,7 @@
   "scripts": {
     "start": "webpack serve --port 3013",
     "build": "webpack --mode=production",
-    "lint": "eslint src --ext js,ts,tsx",
+    "lint": "eslint src",
     "test": "echo \"No tests yet\"",
     "build:types": "tsc"
   },
