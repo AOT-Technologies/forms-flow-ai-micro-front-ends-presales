@@ -1,7 +1,9 @@
 import axios from 'axios';
 import type { AxiosRequestConfig } from 'axios';
 
-const PROXY_API_URL = (window._env_?.FORMS_FLOW_CUSTOM_SERVICES_URL as string) || 'http://localhost:5005';
+import { AppConfig } from '../config/AppConfig';
+
+const PROXY_API_URL = AppConfig.customServicesUrl;
 
 const apiInstance = axios.create({
   baseURL: PROXY_API_URL,

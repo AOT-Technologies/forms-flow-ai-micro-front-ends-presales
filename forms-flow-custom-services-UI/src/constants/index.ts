@@ -4,13 +4,8 @@ declare global {
   }
 }
 
-const MULTITENANCY_ENABLED_VARIABLE =
-  (window._env_ && window._env_.REACT_APP_MULTI_TENANCY_ENABLED) || false;
+import { AppConfig } from '../config/AppConfig';
 
-export const MULTITENANCY_ENABLED =
-  MULTITENANCY_ENABLED_VARIABLE === "true" ||
-  MULTITENANCY_ENABLED_VARIABLE === true
-    ? true
-    : false;
+export const MULTITENANCY_ENABLED = AppConfig.multiTenancyEnabled;
 
 export const BASE_ROUTE = MULTITENANCY_ENABLED ? "/tenant/:tenantId/" : "/";
