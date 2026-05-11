@@ -96,6 +96,7 @@ function ExternalLinkPage() {
   const [status, setStatus] = useState<'loading' | 'success' | 'error' | 'ready'>(
     () => (token ? 'loading' : 'error')
   );
+  const [submitting, setSubmitting] = useState(false);
   const [formData, setFormData] = useState<FormData | null>(null);
   const [errorMessage, setErrorMessage] = useState<string>(
     () => (token ? '' : 'Invalid or missing access link. Please request a new one.')
@@ -128,18 +129,22 @@ function ExternalLinkPage() {
 
   const submitToBackend = (data: any) => {
     if (!token || !formData) return;
-    setStatus('loading');
+    setSubmitting(true);
 
+    // Submit directly to backend (test delay removed)
     apiClient.post(API_ROUTES.EXTERNAL.SUBMIT_FORM, {
       token,
       data,
       taskId: formData.taskId,
       formId: formData.formId,
     })
-      .then(() => setStatus('success'))
+      .then(() => {
+        setSubmitting(false);
+        setStatus('success');
+      })
       .catch((err: Error) => {
         console.error('Submission error', err);
-        setStatus('ready');
+        setSubmitting(false);
         alert('Submission failed. Please try again.');
       });
   };
@@ -162,31 +167,56 @@ function ExternalLinkPage() {
         </div>
       )}
 
+      {/* Submission Overlay */}
+      {submitting && (
+        <div className="portal-overlay">
+          <div className="portal-card portal-status-center" style={{ maxWidth: '600px' }}>
+            <div className="modern-spinner mb-5" />
+            <h2>Submitting Your Response</h2>
+            <p>Please wait while we securely record your information. This usually takes a few seconds.</p>
+          </div>
+        </div>
+      )}
+
       {/* Error */}
       {status === 'error' && (
-        <div className="portal-card portal-status-center">
-          <div className="text-danger mb-4">
-            <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="12" cy="12" r="10" />
-              <line x1="12" y1="8" x2="12" y2="12" />
-              <line x1="12" y1="16" x2="12.01" y2="16" />
+        <div className="portal-card portal-status-center" style={{ maxWidth: '500px' }}>
+          <div className="error-animation">
+            <svg className="error-x" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+              <circle className="error-x__circle" cx="26" cy="26" r="25" fill="none"/>
+              <path className="error-x__path" fill="none" d="M16,16 l20,20 M36,16 l-20,20" />
             </svg>
           </div>
-          <h2>Access Denied</h2>
-          <p style={{ marginTop: '24px' }}>{errorMessage}</p>
+          <h2 style={{ marginTop: '0' }}>Access Denied</h2>
+          <p>{errorMessage}</p>
         </div>
       )}
 
       {/* Success */}
       {status === 'success' && (
-        <div className="portal-card portal-status-center">
-          <div className="text-success mb-4">
-            <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="20 6 9 17 4 12" />
+        <div className="portal-card portal-status-center" style={{ maxWidth: '500px' }}>
+          <div className="success-animation">
+            <svg className="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+              <circle className="checkmark__circle" cx="26" cy="26" r="25" fill="none"/>
+              <path className="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
             </svg>
           </div>
-          <h2>Submitted Successfully</h2>
-          <p style={{ marginTop: '24px' }}>Your response has been securely recorded. You may now close this window.</p>
+          <h2 style={{ marginTop: '0' }}>Submission Complete</h2>
+          <p>
+            Your response has been securely recorded. 
+            You may now close this window safely.
+          </p>
+        </div>
+      )}
+
+      {/* Submission Overlay */}
+      {submitting && (
+        <div className="portal-overlay">
+          <div className="modern-spinner mb-5" />
+          <h2 style={{ color: '#1e293b', textAlign: 'center' }}>Submitting Your Response</h2>
+          <p style={{ color: '#64748b', textAlign: 'center', fontSize: '18px', maxWidth: '400px' }}>
+            Please wait while we securely process and record your information...
+          </p>
         </div>
       )}
 
@@ -195,22 +225,23 @@ function ExternalLinkPage() {
         <div className="portal-card">
           <div className="portal-header">
             <p className="portal-header-title">Secure Form Submission</p>
-            <p className="portal-header-subtitle">Authenticated via Encrypted Link &nbsp;&#183;&nbsp; {formData.taskId}</p>
           </div>
 
-          {/* @ts-ignore */}
-          <Form
-            form={formData.schema}
-            submission={{
-              data: formData.prefill,
-              metadata: {
-                formUrl: '',
-                applicationId: formData.taskId || ''
-              }
-            }}
-            onSubmit={onFormSubmit}
-            onCustomEvent={onCustomEvent}
-          />
+          <div style={{ opacity: submitting ? 0.3 : 1, transition: 'opacity 0.3s ease' }}>
+            {/* @ts-ignore */}
+            <Form
+              form={formData.schema}
+              submission={{
+                data: formData.prefill,
+                metadata: {
+                  formUrl: '',
+                  applicationId: formData.taskId || ''
+                }
+              }}
+              onSubmit={onFormSubmit}
+              onCustomEvent={onCustomEvent}
+            />
+          </div>
         </div>
       )}
     </div>
