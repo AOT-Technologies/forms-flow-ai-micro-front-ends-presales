@@ -96,6 +96,7 @@ function ExternalLinkPage() {
   const [status, setStatus] = useState<'loading' | 'success' | 'error' | 'ready'>(
     () => (token ? 'loading' : 'error')
   );
+  const [submitting, setSubmitting] = useState(false);
   const [formData, setFormData] = useState<FormData | null>(null);
   const [errorMessage, setErrorMessage] = useState<string>(
     () => (token ? '' : 'Invalid or missing access link. Please request a new one.')
@@ -128,18 +129,22 @@ function ExternalLinkPage() {
 
   const submitToBackend = (data: any) => {
     if (!token || !formData) return;
-    setStatus('loading');
+    setSubmitting(true);
 
+    // Submit directly to backend (test delay removed)
     apiClient.post(API_ROUTES.EXTERNAL.SUBMIT_FORM, {
       token,
       data,
       taskId: formData.taskId,
       formId: formData.formId,
     })
-      .then(() => setStatus('success'))
+      .then(() => {
+        setSubmitting(false);
+        setStatus('success');
+      })
       .catch((err: Error) => {
         console.error('Submission error', err);
-        setStatus('ready');
+        setSubmitting(false);
         alert('Submission failed. Please try again.');
       });
   };
@@ -179,6 +184,36 @@ function ExternalLinkPage() {
             </svg>
             <h1>Preparing Your Form</h1>
             <p>We're securely fetching your form and verifying the access link.</p>
+          </div>
+        </div>
+      )}
+
+      {/* ── Submitting Overlay ─────────────────────────────────────────── */}
+      {submitting && (
+        <div className="ff-status-page" style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 9999, background: 'rgba(242, 242, 243, 0.9)', backdropFilter: 'blur(4px)' }}>
+          <div className="ff-status-card ff-status-card--loading">
+            <svg
+              className="ff-spinner"
+              version="1.1" id="L5" x="0px" y="0px"
+              viewBox="0 0 100 100"
+              fill="#253DF4"
+              style={{ width: 60, height: 60 }}
+            >
+              <circle stroke="none" cx="6" cy="50" r="6">
+                <animateTransform attributeName="transform" dur="1s" type="translate"
+                  values="0 15 ; 0 -15; 0 15" repeatCount="indefinite" begin="0.1" />
+              </circle>
+              <circle stroke="none" cx="30" cy="50" r="6">
+                <animateTransform attributeName="transform" dur="1s" type="translate"
+                  values="0 10 ; 0 -10; 0 10" repeatCount="indefinite" begin="0.2" />
+              </circle>
+              <circle stroke="none" cx="54" cy="50" r="6">
+                <animateTransform attributeName="transform" dur="1s" type="translate"
+                  values="0 5 ; 0 -5; 0 5" repeatCount="indefinite" begin="0.3" />
+              </circle>
+            </svg>
+            <h1 style={{ color: 'var(--ff-primary)' }}>Submitting Your Response</h1>
+            <p>Please wait while we securely process and record your information.</p>
           </div>
         </div>
       )}
