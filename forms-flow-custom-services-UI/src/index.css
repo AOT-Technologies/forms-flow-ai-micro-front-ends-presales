@@ -3,98 +3,190 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
-  --primary-color: #4f46e5;
-  --bg-color: #ffffff; /* Changed to plain white for better injection compatibility */
-  --text-main: #1e293b;
-  --text-muted: #64748b;
-  --border-color: #e2e8f0;
-  --error-color: #ef4444;
+  /* formsflow brand tokens — matched to variables.scss in forms-flow-nav */
+  --ff-primary:        #253DF4;   /* $primary */
+  --ff-primary-hover:  #1a2fd4;
+  --ff-warning:        #e67e22;   /* amber — appropriate for access-denied warnings */
+  --ff-success:        #006621;   /* $green-dark */
+  --ff-bg:             #F2F2F3;   /* $gray-light */
+  --ff-surface:        #ffffff;
+  --ff-text:           #303436;   /* $gray-darkest */
+  --ff-text-body:      #4C4C4C;   /* $gray-dark */
+  --ff-text-muted:     #868e96;   /* matches SpinnerSVG fill in forms-flow-submissions */
+  --ff-border:         #E4E6E7;   /* $gray-medium */
+  --ff-border-light:   #E4E6E7;
 }
 
 body {
-  background-color: var(--bg-color);
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  margin: 0;
+  color: #313132;
+}
+
+/* ─── Status pages: loading · error · success ──────────────────────────── */
+
+.ff-status-page {
+  background-color: var(--ff-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.ff-status-card {
+  background: var(--ff-surface);
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  text-align: center;
+  max-width: 460px;
+  width: 90%;
+  padding: 48px 32px;
+  animation: ff-fade-in 0.35s ease-out;
+}
+
+.ff-status-card--loading {
+  border-top: 5px solid var(--ff-primary);
+  max-width: 400px;
+  padding: 40px;
+}
+
+.ff-status-card--error {
+  border-top: 6px solid var(--ff-warning);
+}
+
+.ff-status-card--success {
+  border-top: 6px solid var(--ff-success);
+}
+
+@keyframes ff-fade-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Card headings */
+.ff-status-card h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--ff-text);
+  margin: 0 0 16px 0;
+}
+
+.ff-status-card--loading h1 {
+  font-size: 1.25rem;
+  color: var(--ff-primary);
+  margin-bottom: 12px;
+}
+
+/* Card body text */
+.ff-status-card p {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--ff-text-body);
   margin: 0;
 }
+
+.ff-status-card--loading p {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--ff-text-muted);
+}
+
+/* ─── Spinner ───────────────────────────────────────────────────────────── */
+/* 3-dot bouncing SVG — same pattern as forms-flow-submissions/SpinnerSVG.js */
+.ff-spinner {
+  display: block;
+  margin: 0 auto 16px;
+}
+
+/* ─── Icon circles ──────────────────────────────────────────────────────── */
+
+.ff-icon-circle {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24px;
+}
+
+.ff-icon-circle--warning {
+  background-color: #fff7ed;
+}
+
+.ff-icon-circle--warning svg {
+  width: 36px;
+  height: 36px;
+  stroke: var(--ff-warning);
+}
+
+.ff-icon-circle--success {
+  background-color: #e8f5e9;
+}
+
+.ff-icon-circle--success svg {
+  width: 36px;
+  height: 36px;
+  stroke: var(--ff-success);
+}
+
+/* ─── Footer note (error / info card) ──────────────────────────────────── */
+
+.ff-footer-note {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid var(--ff-border-light);
+  font-size: 0.875rem;
+  color: var(--ff-text-muted);
+}
+
+.ff-support-link {
+  color: var(--ff-primary);
+  text-decoration: underline;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+/* ─── Form (ready state) ────────────────────────────────────────────────── */
 
 .portal-container {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: flex-start; /* Align left as seen in user screenshots */
+  align-items: flex-start;
   justify-content: flex-start;
-  padding: 80px 60px; /* Significantly increased padding */
+  padding: 80px 60px;
+  background-color: var(--ff-surface);
 }
 
 .portal-card {
   width: 100%;
   max-width: 1000px;
-  animation: fadeIn 0.4s ease-out;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  animation: ff-fade-in 0.4s ease-out;
 }
 
 .portal-header {
-  margin-bottom: 48px; /* Increased spacing */
+  margin-bottom: 48px;
 }
 
 .portal-header-title {
   margin: 0;
-  font-size: 32px; /* Larger heading */
+  font-size: 32px;
   font-weight: 700;
-  color: var(--text-main);
+  color: #1e293b;
   letter-spacing: -0.02em;
 }
 
 .portal-header-subtitle {
   margin: 12px 0 0 0;
   font-size: 16px;
-  color: var(--text-muted);
+  color: var(--ff-text-muted);
 }
 
-.portal-status-center {
-  text-align: left; /* Left align for cleaner flow in injected apps */
-}
+/* ─── Form.io overrides ─────────────────────────────────────────────────── */
 
-.portal-status-center h2 {
-  font-size: 42px; /* Much larger as per modern clean designs */
-  font-weight: 700;
-  color: var(--text-main);
-  margin: 24px 0 16px;
-  letter-spacing: -0.03em;
-}
-
-.portal-status-center p {
-  font-size: 18px;
-  color: var(--text-muted);
-  line-height: 1.6;
-  margin: 0;
-}
-
-.portal-footer {
-  display: none;
-}
-
-/* Simpler Spinner */
-.modern-spinner {
-  width: 56px;
-  height: 56px;
-  border: 5px solid #f1f5f9;
-  border-bottom-color: var(--primary-color);
-  border-radius: 50%;
-  display: inline-block;
-  animation: rotation 1s linear infinite;
-}
-
-@keyframes rotation {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-/* Clean Form.io overrides */
 .formio-component-form {
   margin-top: 32px !important;
 }
@@ -108,7 +200,5 @@ body {
 .form-control {
   border-radius: 8px !important;
   padding: 12px 16px !important;
-  border: 1px solid var(--border-color) !important;
+  border: 1px solid var(--ff-border) !important;
 }
-
-
