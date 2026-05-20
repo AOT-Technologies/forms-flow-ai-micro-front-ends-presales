@@ -156,78 +156,112 @@ function ExternalLinkPage() {
   };
 
   return (
-    <div className="portal-container">
-
-      {/* Loading */}
+    <>
+      {/* ── Loading ─────────────────────────────────────────────────────── */}
       {status === 'loading' && (
-        <div className="portal-card portal-status-center">
-          <div className="modern-spinner mb-5" />
-          <h2>Preparing Your Form</h2>
-          <p>We're securely fetching your form and verifying the access link.</p>
-        </div>
-      )}
-
-      {/* Submission Overlay */}
-      {submitting && (
-        <div className="portal-overlay">
-          <div className="portal-card portal-status-center" style={{ maxWidth: '600px' }}>
-            <div className="modern-spinner mb-5" />
-            <h2>Submitting Your Response</h2>
-            <p>Please wait while we securely record your information. This usually takes a few seconds.</p>
+        <div className="ff-status-page">
+          <div className="ff-status-card ff-status-card--loading">
+            {/* 3-dot bouncing spinner — mirrors SpinnerSVG from forms-flow-submissions */}
+            <svg
+              className="ff-spinner"
+              version="1.1" id="L5" x="0px" y="0px"
+              viewBox="0 0 100 100"
+              fill="#868e96"
+              style={{ width: 60, height: 60 }}
+            >
+              <circle stroke="none" cx="6" cy="50" r="6">
+                <animateTransform attributeName="transform" dur="1s" type="translate"
+                  values="0 15 ; 0 -15; 0 15" repeatCount="indefinite" begin="0.1" />
+              </circle>
+              <circle stroke="none" cx="30" cy="50" r="6">
+                <animateTransform attributeName="transform" dur="1s" type="translate"
+                  values="0 10 ; 0 -10; 0 10" repeatCount="indefinite" begin="0.2" />
+              </circle>
+              <circle stroke="none" cx="54" cy="50" r="6">
+                <animateTransform attributeName="transform" dur="1s" type="translate"
+                  values="0 5 ; 0 -5; 0 5" repeatCount="indefinite" begin="0.3" />
+              </circle>
+            </svg>
+            <h1>Preparing Your Form</h1>
+            <p>We're securely fetching your form and verifying the access link.</p>
           </div>
         </div>
       )}
 
-      {/* Error */}
+      {/* ── Submitting Overlay ─────────────────────────────────────────── */}
+      {submitting && (
+        <div className="ff-status-page" style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 9999, background: 'rgba(242, 242, 243, 0.9)', backdropFilter: 'blur(4px)' }}>
+          <div className="ff-status-card ff-status-card--loading">
+            <svg
+              className="ff-spinner"
+              version="1.1" id="L5" x="0px" y="0px"
+              viewBox="0 0 100 100"
+              fill="#253DF4"
+              style={{ width: 60, height: 60 }}
+            >
+              <circle stroke="none" cx="6" cy="50" r="6">
+                <animateTransform attributeName="transform" dur="1s" type="translate"
+                  values="0 15 ; 0 -15; 0 15" repeatCount="indefinite" begin="0.1" />
+              </circle>
+              <circle stroke="none" cx="30" cy="50" r="6">
+                <animateTransform attributeName="transform" dur="1s" type="translate"
+                  values="0 10 ; 0 -10; 0 10" repeatCount="indefinite" begin="0.2" />
+              </circle>
+              <circle stroke="none" cx="54" cy="50" r="6">
+                <animateTransform attributeName="transform" dur="1s" type="translate"
+                  values="0 5 ; 0 -5; 0 5" repeatCount="indefinite" begin="0.3" />
+              </circle>
+            </svg>
+            <h1 style={{ color: 'var(--ff-primary)' }}>Submitting Your Response</h1>
+            <p>Please wait while we securely process and record your information.</p>
+          </div>
+        </div>
+      )}
+
+      {/* ── Error ───────────────────────────────────────────────────────── */}
       {status === 'error' && (
-        <div className="portal-card portal-status-center" style={{ maxWidth: '500px' }}>
-          <div className="error-animation">
-            <svg className="error-x" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
-              <circle className="error-x__circle" cx="26" cy="26" r="25" fill="none"/>
-              <path className="error-x__path" fill="none" d="M16,16 l20,20 M36,16 l-20,20" />
-            </svg>
+        <div className="ff-status-page">
+          <div className="ff-status-card ff-status-card--error">
+            <div className="ff-icon-circle ff-icon-circle--warning">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
+                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+            </div>
+            <h1>Access Denied</h1>
+            <p>{errorMessage}</p>
+            <div className="ff-footer-note">
+              If you need immediate assistance, please contact the{' '}
+              <span className="ff-support-link">support team</span>.
+            </div>
           </div>
-          <h2 style={{ marginTop: '0' }}>Access Denied</h2>
-          <p>{errorMessage}</p>
         </div>
       )}
 
-      {/* Success */}
+      {/* ── Success ─────────────────────────────────────────────────────── */}
       {status === 'success' && (
-        <div className="portal-card portal-status-center" style={{ maxWidth: '500px' }}>
-          <div className="success-animation">
-            <svg className="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
-              <circle className="checkmark__circle" cx="26" cy="26" r="25" fill="none"/>
-              <path className="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
-            </svg>
+        <div className="ff-status-page">
+          <div className="ff-status-card ff-status-card--success">
+            <div className="ff-icon-circle ff-icon-circle--success">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <h1>Submitted Successfully</h1>
+            <p>Your response has been securely recorded. You may now close this window.</p>
           </div>
-          <h2 style={{ marginTop: '0' }}>Submission Complete</h2>
-          <p>
-            Your response has been securely recorded. 
-            You may now close this window safely.
-          </p>
         </div>
       )}
 
-      {/* Submission Overlay */}
-      {submitting && (
-        <div className="portal-overlay">
-          <div className="modern-spinner mb-5" />
-          <h2 style={{ color: '#1e293b', textAlign: 'center' }}>Submitting Your Response</h2>
-          <p style={{ color: '#64748b', textAlign: 'center', fontSize: '18px', maxWidth: '400px' }}>
-            Please wait while we securely process and record your information...
-          </p>
-        </div>
-      )}
-
-      {/* Ready — render form */}
+      {/* ── Ready — render form ──────────────────────────────────────────── */}
       {status === 'ready' && formData && (
-        <div className="portal-card">
-          <div className="portal-header">
-            <p className="portal-header-title">Secure Form Submission</p>
-          </div>
+        <div className="portal-container">
+          <div className="portal-card">
+            <div className="portal-header">
+              <p className="portal-header-title">Secure Form Submission</p>
+              <p className="portal-header-subtitle">Authenticated via Encrypted Link &nbsp;&#183;&nbsp; {formData.taskId}</p>
+            </div>
 
-          <div style={{ opacity: submitting ? 0.3 : 1, transition: 'opacity 0.3s ease' }}>
             {/* @ts-ignore */}
             <Form
               form={formData.schema}
@@ -244,9 +278,7 @@ function ExternalLinkPage() {
           </div>
         </div>
       )}
-    </div>
-
-
+    </>
   );
 }
 
