@@ -6,8 +6,8 @@
   /* formsflow brand tokens — matched to variables.scss in forms-flow-nav */
   --ff-primary:        #253DF4;   /* $primary */
   --ff-primary-hover:  #1a2fd4;
-  --ff-warning:        #e67e22;   /* amber — appropriate for access-denied warnings */
-  --ff-success:        #006621;   /* $green-dark */
+  --ff-warning:        #6B7280;   /* Slate/Grey — appropriate for access-denied warnings */
+  --ff-success:        #4B5563;   /* Darker Slate/Grey */
   --ff-bg:             #F2F2F3;   /* $gray-light */
   --ff-surface:        #ffffff;
   --ff-text:           #303436;   /* $gray-darkest */
@@ -113,7 +113,7 @@ body {
 }
 
 .ff-icon-circle--warning {
-  background-color: #fff7ed;
+  background-color: #F3F4F6;
 }
 
 .ff-icon-circle--warning svg {
@@ -123,7 +123,7 @@ body {
 }
 
 .ff-icon-circle--success {
-  background-color: #e8f5e9;
+  background-color: #F3F4F6;
 }
 
 .ff-icon-circle--success svg {
