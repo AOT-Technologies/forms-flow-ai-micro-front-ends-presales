@@ -257,10 +257,7 @@ function ExternalLinkPage() {
       {status === 'ready' && formData && (
         <div className="portal-container">
           <div className="portal-card">
-            <div className="portal-header">
-              <p className="portal-header-title">Secure Form Submission</p>
-              <p className="portal-header-subtitle">Authenticated via Encrypted Link &nbsp;&#183;&nbsp; {formData.taskId}</p>
-            </div>
+
 
             {/* @ts-ignore */}
             <Form
