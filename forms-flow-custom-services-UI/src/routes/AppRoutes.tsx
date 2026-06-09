@@ -1,6 +1,6 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import ExternalLinkPage from '../pages/ExternalLink/ExternalLinkPage';
+import MagicLinkPage from '../pages/MagicLink/MagicLinkPage';
 import { APP_ROUTES } from '../constants/routes';
 
 function AppRoutes() {
@@ -12,12 +12,12 @@ function AppRoutes() {
           <div className="ff-status-page">
             <div className="ff-status-card ff-status-card--loading">
               <h1>Patient Portal</h1>
-              <p>Please use a valid external link to access your form.</p>
+              <p>Please use a valid magic link to access your form.</p>
             </div>
           </div>
         }
       />
-      <Route path={APP_ROUTES.EXTERNAL_LINK} element={<ExternalLinkPage />} />
+      <Route path={APP_ROUTES.MAGIC_LINK} element={<MagicLinkPage />} />
       <Route
         path={APP_ROUTES.NOT_FOUND}
         element={

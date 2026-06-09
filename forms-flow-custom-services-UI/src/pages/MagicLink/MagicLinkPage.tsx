@@ -10,7 +10,7 @@ import { AppConfig } from '../../config/AppConfig';
 const FORMIO_URL = AppConfig.formioUrl;
 
 // Formsflow forms embed custom JS that references authenticated user objects (groups,
-// roles, currentUser, keycloak). These don't exist in an anonymous external-link session
+// roles, currentUser, keycloak). These don't exist in an anonymous magic-link session
 // and cause null-reference crashes during visibility evaluation.
 // This sanitizer walks the schema and:
 //   1. Removes customConditional from components that reference those objects
@@ -24,7 +24,7 @@ function sanitizeComponent(component: any): any {
   const c = { ...component };
 
   if (c.customConditional && FORMSFLOW_CTX_PATTERN.test(c.customConditional)) {
-    console.info(`[Schema] Stripping customConditional from '${c.key}' — always shown for external-link.`);
+    console.info(`[Schema] Stripping customConditional from '${c.key}' — always shown for magic-link.`);
     delete c.customConditional;
     if (c.conditional) {
       c.conditional = { show: null, when: null, eq: '' };
@@ -55,7 +55,7 @@ function sanitizeComponent(component: any): any {
         // Native Form.io submit engine
         instance.root.submit();
       } catch (e) {
-        console.error('ExternalLink Auto-Submit Error:', e);
+        console.error('MagicLink Auto-Submit Error:', e);
       }
     `;
   }
@@ -89,7 +89,7 @@ interface FormData {
   formId: string;
 }
 
-function ExternalLinkPage() {
+function MagicLinkPage() {
   const [searchParams] = useSearchParams();
   const token = searchParams.get('token');
 
@@ -110,7 +110,7 @@ function ExternalLinkPage() {
   useEffect(() => {
     if (!token) return;
 
-    apiClient.get<any>(API_ROUTES.EXTERNAL.GET_FORM(token))
+    apiClient.get<any>(API_ROUTES.MAGIC_LINK.GET_FORM(token))
       .then((res) => {
         if (res.data.schema) {
           const cleanSchema = sanitizeSchema(res.data.schema);
@@ -131,8 +131,7 @@ function ExternalLinkPage() {
     if (!token || !formData) return;
     setSubmitting(true);
 
-    // Submit directly to backend (test delay removed)
-    apiClient.post(API_ROUTES.EXTERNAL.SUBMIT_FORM, {
+    apiClient.post(API_ROUTES.MAGIC_LINK.SUBMIT_FORM, {
       token,
       data,
       taskId: formData.taskId,
@@ -257,8 +256,6 @@ function ExternalLinkPage() {
       {status === 'ready' && formData && (
         <div className="portal-container">
           <div className="portal-card">
-
-
             {/* @ts-ignore */}
             <Form
               form={formData.schema}
@@ -279,4 +276,4 @@ function ExternalLinkPage() {
   );
 }
 
-export default ExternalLinkPage;
+export default MagicLinkPage;
