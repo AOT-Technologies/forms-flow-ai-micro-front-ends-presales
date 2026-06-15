@@ -769,3 +769,15 @@ span.text-danger,
     }
   }
 }
+
+/* Fix double asterisk issue for required fields in Form.io */
+.field-required:after {
+  content: none !important;
+}
+
+.required-star,
+.field-required-inline {
+  color: #dc3545 !important;
+}
+
+
