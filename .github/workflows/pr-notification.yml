@@ -4,7 +4,7 @@ on:
   pull_request_target:
     types: [opened, synchronize, closed]
     branches:
-      - develop
+      - develop-presales
       - release/**
       - main
 
