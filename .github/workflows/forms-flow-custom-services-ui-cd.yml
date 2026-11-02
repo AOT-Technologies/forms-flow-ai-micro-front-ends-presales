@@ -1,54 +1,98 @@
 name: forms-flow-custom-services-ui-CD
+
 on:
   workflow_dispatch:
   push:
-    branches:
-      - main
-      - develop
-      - release/*
-      - develop-presales
+    branches: [ main, develop-presales, release/* ]
     paths:
       - "forms-flow-custom-services-UI/**"
       - "VERSION"
+
 defaults:
   run:
     shell: bash
-    working-directory: ./forms-flow-custom-services-UI
+
 jobs:
+
+  # ============================================================
+  # BUILD AND PUSH ARTIFACTS TO S3
+  # ============================================================
   build:
+    if: github.repository == 'AOT-Technologies/forms-flow-ai-micro-front-ends-presales'
     name: Build and push artifacts to s3
     runs-on: ubuntu-24.04
+
+    permissions:
+      contents: read
+      id-token: write
+
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      # ----------------------------------------------------------
+      # Checkout repository
+      # ----------------------------------------------------------
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      # ----------------------------------------------------------
+      # Setup Node.js
+      # ----------------------------------------------------------
+      - name: Setup Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
-          node-version: '20.x'
+          node-version: '20'
+
+      # ----------------------------------------------------------
+      # Install dependencies & Build
+      # ----------------------------------------------------------
+      - name: Install dependencies
+        run: npm ci
+        working-directory: ./forms-flow-custom-services-UI
+
+      - name: Build
+        run: npm run build
+        working-directory: ./forms-flow-custom-services-UI
+
+      # ----------------------------------------------------------
+      # Configure AWS credentials (OIDC)
+      # ----------------------------------------------------------
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@cbe3b392738ccf3f987d68400dafcf4b0624a56c # v6.2.4
+        with:
+          role-to-assume: ${{ secrets.AWS_GITHUB_OIDC_S3_ROLE_ARN }}
+          aws-region: ${{ secrets.REGION }}
+
+      # ----------------------------------------------------------
+      # Version
+      # ----------------------------------------------------------
       - name: Set version
         if: ${{ github.ref != 'refs/heads/main' }}
         working-directory: .
         run: |
           VER=$(cat VERSION)
-          echo "VERSION=$VER" >> $GITHUB_ENV
-          
+          echo "VERSION=$VER" >> "$GITHUB_ENV"
+
       - name: Set version
         if: ${{ github.ref == 'refs/heads/main' }}
         working-directory: .
         run: |
           VER=$(cat VERSION)
           VER=${VER/-alpha/''}
-          echo "VERSION=$VER" >> $GITHUB_ENV
+          echo "VERSION=$VER" >> "$GITHUB_ENV"
 
-      - run: npm ci
-      - run: npm run build
-      - uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.REGION }}
-      - run: npm ci
+      - name: Show version
+        run: echo "VERSION=${{ env.VERSION }}"
+
+      # ----------------------------------------------------------
+      # Upload artifacts to S3
+      # ----------------------------------------------------------
+      - name: Install script dependencies
+        run: npm ci
         working-directory: ./scripts
-      - run: node index forms-flow-custom-services-UI
+
+      - name: Upload artifacts to S3
+        run: node index forms-flow-custom-services-UI
         env:
-          BUCKET: ${{ secrets.BUCKET}}
+          BUCKET: ${{ secrets.BUCKET }}
           VERSION: ${{ env.VERSION }}
+          REGION: ${{ secrets.REGION }}
         working-directory: ./scripts
