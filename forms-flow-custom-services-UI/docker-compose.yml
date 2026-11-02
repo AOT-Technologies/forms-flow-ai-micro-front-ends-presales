@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+  frontend:
+    build: .
+    container_name: forms-flow-custom-services-UI
+    ports:
+      - "3013:80"
+    restart: always
